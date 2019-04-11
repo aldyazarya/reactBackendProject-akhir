@@ -22,10 +22,10 @@ app.post('/users', async (req,res) => {
 
 
 app.post('/users/login', async (req, res) => {
-    const {email, password} = req.body
+    const {username, password} = req.body
 
     try {
-        const user = await User.findByCredentials(email, password) //function buatan sendiri
+        const user = await User.findByCredentials(username, password) //function buatan sendiri
         res.status(200).send(user)
     } catch (e) {
         res.status(404).send(e)
