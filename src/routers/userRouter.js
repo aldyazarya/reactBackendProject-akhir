@@ -106,7 +106,6 @@ router.post('/users', async (req, res) => {
         })
     })
 })
-
 //verify email
 router.get('/verify', (req, res) => {
     const username = req.query.username
@@ -123,5 +122,39 @@ router.get('/verify', (req, res) => {
         })
     })
 })
+
+//login by username and password
+router.post('/users/login', (req, res) => {
+    const {username, password} = req.body
+    const sql = `SELECT * FROM users WHERE username = '${username}'`
+
+    conn.query(sql, async (err, result) => {
+        if (err) return res.send (err.sqlMessage)
+
+        const user = result
+
+        if(!user[0]) return res.send("User Not Found")
+
+        if(!user[0].verified) return res.send("Please, Verify your Account") //untuk mengecek apakah sudah verifikasi apa belum
+
+        const hash = await bcrypt.compare(password, user[0].password) //password adalah apa yang ditulis saat login, user.password adalaah yang ada di database
+        if(!hash) return res.send("Wrong Password")
+
+        res.send(user)
+    })
+})
+
+//edit user  by userid
+router.patch('/users/:userid', (req, res) => {
+    const sql = `UPDATE users SET ? WHERE id = ?`
+    const data= [req.body, req.params.userid]
+
+    conn.query(sql, data, (err, result) => {
+        if (err) return res.send(err)
+
+        res.send(result)
+    })
+})
+
 
 module.exports = router
