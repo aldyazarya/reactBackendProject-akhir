@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const conn = require('../connection/connection')
 
-//create address by userid
+//create address by username
 router.post('/address', (req, res) => {
     const sql = `INSERT INTO address SET ?`
     const data = req.body
@@ -13,10 +13,10 @@ router.post('/address', (req, res) => {
     })
 })
 
-//get address by userid
-router.get('/showaddress/:userid', (req, res) => {
-    const sql = `SELECT * FROM address WHERE user_id =?`
-    const data = req.params.userid
+//get address by username
+router.get('/showaddress/:username', (req, res) => {
+    const sql = `SELECT * FROM address WHERE username =?`
+    const data = req.params.username
 
     conn.query(sql, data, (err, result) => {
         if (err) return res.send(err.sqlMessage)

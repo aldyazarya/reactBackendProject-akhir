@@ -123,6 +123,8 @@ router.get('/verify', (req, res) => {
     })
 })
 
+
+
 //login by username and password
 router.post('/users/login', (req, res) => {
     const {username, password} = req.body
@@ -151,6 +153,18 @@ router.patch('/users/:userid', (req, res) => {
 
     conn.query(sql, data, (err, result) => {
         if (err) return res.send(err)
+
+        res.send(result)
+    })
+})
+
+//get user to show in profile 
+router.get('/users/:username', (req, res) => {
+    const sql = `SELECT * FROM users where username = ?`
+    const data = req.params.username
+
+    conn.query(sql, data, (err, result) => {
+        if (err) return res.send(err.sqlMessage)
 
         res.send(result)
     })
