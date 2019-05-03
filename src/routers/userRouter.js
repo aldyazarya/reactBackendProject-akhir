@@ -33,6 +33,7 @@ router.post('/users', async (req, res) => {
             res.send(result)
         })
     })
+
 })
 //verify email
 router.get('/verify', (req, res) => {
@@ -74,13 +75,13 @@ router.post('/users/login', (req, res) => {
     })
 })
 
-//edit user  by userid
-router.patch('/users/:userid', (req, res) => {
-    const sql = `UPDATE users SET ? WHERE id = ?`
-    const data= [req.body, req.params.userid]
+//edit user  by username
+router.patch('/users/:username', (req, res) => {
+    const sql = `UPDATE users SET ? WHERE username = ?`
+    const data= [req.body, req.params.username]
 
     conn.query(sql, data, (err, result) => {
-        if (err) return res.send(err)
+        if (err) return res.send(err.sqlMessage)
 
         res.send(result)
     })

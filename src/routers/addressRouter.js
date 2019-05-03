@@ -2,16 +2,7 @@ const router = require('express').Router()
 const conn = require('../connection/connection')
 
 //create address by username
-router.post('/address', (req, res) => {
-    const sql = `INSERT INTO address SET ?`
-    const data = req.body
 
-    conn.query(sql, data, (err, result) => {
-        if(err) return res.send(err)
-
-        res.send(result)
-    })
-})
 
 //get address by username
 router.get('/showaddress/:username', (req, res) => {
@@ -25,13 +16,24 @@ router.get('/showaddress/:username', (req, res) => {
     })
 })
 
-//edit address by addressid
-router.patch('/address/:addressid', (req, res) => {
-    const sql = `UPDATE address SET ? WHERE id = ?`
-    const data = [req.body, req.params.addressid]
+//edit address by username
+router.patch('/address/:username', (req, res) => {
+    const sql = `UPDATE address SET ? WHERE username = ?`
+    const data = [req.body, req.params.username]
 
     conn.query(sql, data, (err, result) =>{
         if (err) return res.send(err)
+
+        res.send(result)
+    })
+})
+
+router.post('/address/', (req, res) => {
+    const sql = `INSERT INTO address SET ?`
+    const data = req.body
+
+    conn.query(sql, data, (err, result) => {
+        if(err) res.send(err)
 
         res.send(result)
     })

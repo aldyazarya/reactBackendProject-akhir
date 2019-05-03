@@ -35,8 +35,8 @@ const upstore = multer({
 //upload avatar
 router.post('/upstore', upstore.single('avatar'), (req, res) => {
     const sql = `SELECT * FROM profile WHERE username = ?`
-    const sql2 = `UPDATE profile SET avatar = '${req.file.filename}' WHERE username = '${req.body.uname}'`
-    const data = req.body.uname
+    const sql2 = `UPDATE profile SET avatar = '${req.file.filename}' WHERE username = '${req.body.username}'`
+    const data = req.body.username
 
     conn.query(sql, data, (err, result) => {
         if (err) return res.send(err)
@@ -84,9 +84,21 @@ router.get('/avatar/:photo', (req, res) => {
     res.sendFile(`${uploadAvatar}/${req.params.photo}`)
 })
 
-//create profile by user id
-router.post('/profile', (req, res) => {
-    const sql = `INSERT INTO profile SET ?`
+//edit profile by username
+router.patch('/profile/:username', (req, res) => {
+    const sql = `update profile SET ? where username = ?`
+    const data = [req.body, req.params.username]
+
+    conn.query(sql, data, (err, result) => {
+        if(err) return res.send(err)
+
+        res.send(result)
+    })
+})
+
+//create profile by username
+router.post('/profile/', (req, res) => {
+    const sql = `INSERT INTO profile SET ? `
     const data = req.body
 
     conn.query(sql, data, (err, result) => {
