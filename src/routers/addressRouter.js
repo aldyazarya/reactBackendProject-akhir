@@ -1,44 +1,13 @@
 const router = require('express').Router()
-const conn = require('../connection/connection')
-
-//create address by username
+const {addressControl} = require ('../controllers/index')
 
 
 //get address by username
-router.get('/showaddress/:username', (req, res) => {
-    const sql = `SELECT * FROM address WHERE username =?`
-    const data = req.params.username
-
-    conn.query(sql, data, (err, result) => {
-        if (err) return res.send(err.sqlMessage)
-
-        res.send(result)
-    })
-})
-
+router.get('/showaddress/:username', addressControl.show_address )
 //edit address by username
-router.patch('/address/:username', (req, res) => {
-    const sql = `UPDATE address SET ? WHERE username = ?`
-    const data = [req.body, req.params.username]
-
-    conn.query(sql, data, (err, result) =>{
-        if (err) return res.send(err)
-
-        res.send(result)
-    })
-})
-
-router.post('/address/', (req, res) => {
-    const sql = `INSERT INTO address SET ?`
-    const data = req.body
-
-    conn.query(sql, data, (err, result) => {
-        if(err) res.send(err)
-
-        res.send(result)
-    })
-})
-
+router.patch('/address/:username', addressControl.edit_address )
+//create address
+router.post('/address/', addressControl.create_address )
 
 
 module.exports = router
