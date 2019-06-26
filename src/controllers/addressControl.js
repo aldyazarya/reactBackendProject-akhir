@@ -23,7 +23,7 @@ module.exports = {
     },
     create_address : (req, res) => {
         const sql = `INSERT INTO address SET ?`
-        const data = req.body
+        const {} = req.body
     
         conn.query(sql, data, (err, result) => {
             if(err) res.send(err)

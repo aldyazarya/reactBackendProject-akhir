@@ -43,8 +43,10 @@ router.get('/avatar/:photo', profileControl.show_avatar_browser)
 //edit profile by username
 router.patch('/profile/:username', profileControl.edit_profile )
 //create profile by username
-router.post('/profile/', profileControl.create_profile )
+router.post('/profile/', upstore.single('avatar'), profileControl.create_profile )
 //get profile by username
 router.get('/profile/:username', profileControl.get_profile )
+//get all profile
+router.get('/getallprofile',profileControl.getAll_profile)
 
 module.exports = router

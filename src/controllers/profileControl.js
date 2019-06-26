@@ -1,5 +1,7 @@
 const conn = require ('../connection/connection')
+const path = require ('path')
 
+const uploadAvatar = path.join(__dirname + '/../uploadAvatar')
 
 module.exports = {
     upload_avatar: (req, res) => {
@@ -20,7 +22,7 @@ module.exports = {
     delete_avatar: (req, res) => {
         const data = req.query.username
         const sql = `SELECT * FROM profile WHERE username = '${data}'`
-        const sql2 = `UPDATE users SET avatar = null where username = '${data}'`
+        const sql2 = `UPDATE profile SET avatar = null where username = '${data}'`
     
         conn.query(sql, data, (err, result) => {
             if (err) return res.send(err.sqlMessage)
@@ -60,11 +62,23 @@ module.exports = {
         })
     },
     create_profile: (req, res) => {
-        const sql = `INSERT INTO profile SET ? `
-        const data = req.body
+        const sql = `INSERT INTO profile SET username='${username}', 
+                    name='${name}', 
+                    dateofbirth='${dateofbirth}',
+                    gender='${gender}',
+                    phonenumber ='${phonenumber}',
+                    avatar='${req.file.filename}' `
+        const {
+            username,
+            name,
+            dateofbirth,
+            gender,
+            phonenumber,
+            avatar
+        } = req.body
     
-        conn.query(sql, data, (err, result) => {
-            if(err) return res.send(err)
+        conn.query(sql, (err, result) => {
+            if(err) return res.send(err.sqlMessage)
     
             res.send(result)
         })
@@ -76,6 +90,15 @@ module.exports = {
         conn.query(sql, data, (err, result) => {
             if (err) return res.send(err.sqlMessage)
     
+            res.send(result)
+        })
+    },
+    getAll_profile: (req, res) => {
+        const sql = `SELECT * FROM profile`
+
+        conn.query(sql, (err, result) => {
+            if(err) return res.send(err.sqlMessage)
+
             res.send(result)
         })
     }
